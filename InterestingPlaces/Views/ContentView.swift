@@ -29,7 +29,6 @@
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
-
 import SwiftUI
 
 struct ContentView: View {
@@ -96,15 +95,17 @@ private struct LocationOptionsView: View {
   
   var body: some View {
     VStack(spacing: 10) {
-      Label(
-        title: { Text("Find on Map")
-          .foregroundColor(.white)
-          .fontWeight(.bold) },
-        icon: {
-          Image(systemName: "mappin.and.ellipse")
-            .foregroundColor(.black)
+        NavigationLink(destination: MapView(location: place)) {
+            Label(
+            title: { Text("Find on Map")
+              .foregroundColor(.white)
+              .fontWeight(.bold) },
+            icon: {
+              Image(systemName: "mappin.and.ellipse")
+                .foregroundColor(.black)
+            }
+            )
         }
-      )
       Button {
         print("Directions goes here")
       } label: {
