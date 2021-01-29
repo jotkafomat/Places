@@ -30,15 +30,19 @@ import SwiftUI
 import MapKit
 
 struct MapView: View {
+    let location: Place
     @State private var region: MKCoordinateRegion
     @Environment(\.presentationMode) private var presentationMode
     
     init(location: Place) {
+        self.location = location
         _region = State(initialValue: location.region)
     }
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region, interactionModes: [.all], showsUserLocation: false, userTrackingMode: nil)
+            Map(coordinateRegion: $region, annotationItems: [location]) { item in
+                MapMarker(coordinate: item.location.coordinate, tint: Color.red)
+            }
             VStack {
                 HStack {
                     Spacer()
