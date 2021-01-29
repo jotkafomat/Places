@@ -43,7 +43,7 @@ struct MapView: View {
     }
     var body: some View {
         ZStack {
-            MapViewUI(location: location, mapViewType: mapType)
+            MapViewUI(location: location, mapViewType: mapType, places: places)
             VStack {
                 HStack {
                     Spacer()

@@ -32,12 +32,15 @@ import MapKit
 struct MapViewUI: UIViewRepresentable {
     let location: Place
     let mapViewType: MKMapType
+    let places: [Place]
     
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.setRegion(location.region, animated: false)
         mapView.mapType = mapViewType
         mapView.isRotateEnabled = false
+        mapView.addAnnotations(places)
+        mapView.delegate = context.coordinator
         return mapView
     }
     
@@ -50,6 +53,19 @@ struct MapViewUI: UIViewRepresentable {
     }
     
     final class MapCoordinator: NSObject, MKMapViewDelegate {
+        
+        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+            guard let placeAnnotation = annotation as? Place else {
+                return nil
+            }
+            let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "Interesting Place") as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "Interesting Place")
+            annotationView.canShowCallout = true
+            annotationView.glyphText = "🔍"
+            annotationView.glyphTintColor = UIColor(displayP3Red: 0.082, green: 0.518, blue: 0.263, alpha: 1.0)
+            annotationView.titleVisibility = .visible
+            annotationView.detailCalloutAccessoryView = UIImage(named: placeAnnotation.image).map(UIImageView.init)
+            return annotationView
+        }
         
     }
 }
