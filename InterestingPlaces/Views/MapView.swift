@@ -56,6 +56,13 @@ struct MapView: View {
                 }
                 .padding()
                 Spacer()
+                Picker("", selection: $mapType) {
+                    Text("Standard").tag(MKMapType.standard)
+                    Text("Hybrid").tag(MKMapType.hybrid)
+                    Text("Satellite").tag(MKMapType.satellite)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .offset(y: -28)
             }
         }
         .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
