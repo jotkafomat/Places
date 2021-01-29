@@ -31,16 +31,18 @@ import MapKit
 
 struct MapView: View {
     let location: Place
+    let places: [Place]
     @State private var region: MKCoordinateRegion
     @Environment(\.presentationMode) private var presentationMode
     
-    init(location: Place) {
+    init(location: Place, places: [Place]) {
         self.location = location
+        self.places = places
         _region = State(initialValue: location.region)
     }
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region, annotationItems: [location]) { item in
+            Map(coordinateRegion: $region, annotationItems: places) { item in
                 MapAnnotation(coordinate: item.location.coordinate) {
                     VStack {
                         Circle()
@@ -71,6 +73,6 @@ struct MapView: View {
 
 struct Map_Previews: PreviewProvider {
     static var previews: some View {
-        MapView(location: MapDirectory().places[0])
+        MapView(location: MapDirectory().places[0], places: MapDirectory().places)
     }
 }
