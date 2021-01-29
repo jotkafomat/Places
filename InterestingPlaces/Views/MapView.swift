@@ -41,7 +41,14 @@ struct MapView: View {
     var body: some View {
         ZStack {
             Map(coordinateRegion: $region, annotationItems: [location]) { item in
-                MapMarker(coordinate: item.location.coordinate, tint: Color.red)
+                MapAnnotation(coordinate: item.location.coordinate) {
+                    VStack {
+                        Circle()
+                            .fill(Color.red)
+                        Text(item.name)
+                            .fontWeight(.bold)
+                    }
+                }
             }
             VStack {
                 HStack {
