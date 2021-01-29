@@ -38,7 +38,7 @@ struct MapView: View {
     }
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region)
+            Map(coordinateRegion: $region, interactionModes: [.all], showsUserLocation: false, userTrackingMode: nil)
             VStack {
                 HStack {
                     Spacer()
