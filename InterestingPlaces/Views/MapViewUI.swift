@@ -29,42 +29,27 @@
 import SwiftUI
 import MapKit
 
-struct MapView: View {
+struct MapViewUI: UIViewRepresentable {
     let location: Place
-    let places: [Place]
-    @State private var region: MKCoordinateRegion
-    @State private var mapType: MKMapType = .standard
-    @Environment(\.presentationMode) private var presentationMode
+    let mapViewType: MKMapType
     
-    init(location: Place, places: [Place]) {
-        self.location = location
-        self.places = places
-        _region = State(initialValue: location.region)
+    func makeUIView(context: Context) -> MKMapView {
+        let mapView = MKMapView()
+        mapView.setRegion(location.region, animated: false)
+        mapView.mapType = mapViewType
+        mapView.isRotateEnabled = false
+        return mapView
     }
-    var body: some View {
-        ZStack {
-            MapViewUI(location: location, mapViewType: mapType)
-            VStack {
-                HStack {
-                    Spacer()
-                    Button {
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .imageScale(.large)
-                    }
-                }
-                .padding()
-                Spacer()
-            }
-        }
-        .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-        .navigationBarHidden(true)
+    
+    func updateUIView(_ mapView: MKMapView, context: Context) {
+        mapView.mapType = mapViewType
     }
-}
-
-struct Map_Previews: PreviewProvider {
-    static var previews: some View {
-        MapView(location: MapDirectory().places[0], places: MapDirectory().places)
+    
+    func makeCoordinator() -> MapCoordinator {
+        .init()
+    }
+    
+    final class MapCoordinator: NSObject, MKMapViewDelegate {
+        
     }
 }
