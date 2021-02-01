@@ -40,6 +40,9 @@ struct MapViewUI: UIViewRepresentable {
         mapView.isRotateEnabled = false
         mapView.addAnnotations(places)
         mapView.delegate = context.coordinator
+        let categories: [MKPointOfInterestCategory] = [.restaurant, .atm, .hotel]
+        let filter = MKPointOfInterestFilter(including: categories)
+        mapView.pointOfInterestFilter = filter
         return mapView
     }
     
