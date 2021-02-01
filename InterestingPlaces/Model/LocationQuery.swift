@@ -32,10 +32,10 @@ import Combine
 
 final class LocationQuery: ObservableObject {
     @Published var searchQuery = ""
-    @Published var searchResult = [String]()
+    @Published private(set) var searchResult = [String]()
     
     private var subscriptions: Set<AnyCancellable> = []
-    private var region: MKCoordinateRegion
+    private let region: MKCoordinateRegion
     
     init(region: MKCoordinateRegion) {
         self.region = region

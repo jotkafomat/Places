@@ -47,13 +47,13 @@ struct MapView: View {
             MapViewUI(location: location, mapViewType: mapType, places: places)
             VStack {
                 HStack {
-                    Spacer()
                     Button {
                         showSearch.toggle()
                     } label: {
                         Image(systemName: "magnifyingglass.circle.fill")
                             .imageScale(.large)
                     }
+                    Spacer()
                     Button {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
