@@ -34,6 +34,7 @@ import SwiftUI
 
 struct DetailView: View {
   private let location: Place
+    @StateObject private var snapshoter: Snapshotter
 
   var body: some View {
     VStack {
@@ -42,17 +43,28 @@ struct DetailView: View {
       ScrollView {
         Text(location.details)
           .font(.body)
+        Image(uiImage: snapshoter.isOnDevice ? snapshoter.mapSnapShot! : snapshoter.defaultMap)
+            .resizable()
+            .frame(width: 200, height: 200)
+            .padding(.bottom)
       }
       .padding(.top)
     }
     .padding(.top, -60)
     .padding(.horizontal)
     .background(RoadView())
+    .onAppear(perform: loadMapSnapshot)
   }
   
   init(location: Place) {
     self.location = location
+    _snapshoter = StateObject(wrappedValue: Snapshotter(imageName: location.image, region: location.region))
   }
+    func loadMapSnapshot() {
+        if !snapshoter.isOnDevice {
+            snapshoter.takeSnapshot()
+        }
+    }
 }
 
 struct DetailView_Previews: PreviewProvider {
