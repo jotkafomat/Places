@@ -50,5 +50,7 @@
 	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>needed for direction and distance</string>
 </dict>
 </plist>
