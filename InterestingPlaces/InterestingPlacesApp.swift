@@ -37,8 +37,7 @@ struct InterestingPlacesApp: App {
   
   var body: some Scene {
     WindowGroup {
-//      ContentView(places: MapDirectory().places)
-        LocationView()
+      ContentView(places: MapDirectory().places)
     }
   }
 }

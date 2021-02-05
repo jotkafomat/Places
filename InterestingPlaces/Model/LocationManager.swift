@@ -32,8 +32,10 @@ import CoreLocation
 final class LocationManager: NSObject, ObservableObject {
     var locactionManager = CLLocationManager()
     var previousLocation: CLLocation?
+    lazy var geocoder = CLGeocoder()
     
     @Published var locationString = ""
+    @Published var currentAddress = ""
     
     
     override init() {
@@ -49,6 +51,35 @@ final class LocationManager: NSObject, ObservableObject {
         } else {
             locactionManager.requestWhenInUseAuthorization()
         }
+    }
+    func fetchAdress(for place: Place) {
+        currentAddress = ""
+        geocoder.reverseGeocodeLocation(place.location) { [weak self ] placemarks,
+                                                                       error in
+            if let error = error {
+                fatalError(error.localizedDescription)
+            }
+            guard let placemarks = placemarks?.first else { return }
+            if let streetNumber = placemarks.subThoroughfare,
+               let street = placemarks.thoroughfare,
+               let city = placemarks.locality,
+               let state = placemarks.administrativeArea {
+                DispatchQueue.main.async {
+                    self?.currentAddress = "\(streetNumber) \(street) \(city) \(state)"
+                }
+            } else if let city = placemarks.locality,
+                      let state = placemarks.administrativeArea {
+                DispatchQueue.main.async {
+                    self?.currentAddress = "\(city) \(state)"
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self?.currentAddress = "adress unknown"
+                }
+            }
+            
+        }
+        
     }
     
 }
@@ -78,7 +109,7 @@ extension LocationManager: CLLocationManagerDelegate {
             print("Access denied")
         default:
             print(clError)
-           // print("catch all errors")
+        // print("catch all errors")
         }
     }
     
