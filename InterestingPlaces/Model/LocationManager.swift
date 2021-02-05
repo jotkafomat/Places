@@ -31,6 +31,7 @@ import CoreLocation
 
 final class LocationManager: NSObject, ObservableObject {
     var locactionManager = CLLocationManager()
+    var previousLocation: CLLocation?
     
     @Published var locationString = ""
     
@@ -39,6 +40,7 @@ final class LocationManager: NSObject, ObservableObject {
         super.init()
         locactionManager.delegate = self
         locactionManager.desiredAccuracy = kCLLocationAccuracyBest
+        locactionManager.allowsBackgroundLocationUpdates = true
     }
     
     func startLocationServices() {
@@ -59,7 +61,14 @@ extension LocationManager: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let latest = locations.first else { return }
-        locationString = "location: \(latest.description)"
+        if previousLocation == nil {
+            previousLocation = latest
+        } else {
+            let distanceInMeters = previousLocation?.distance(from: latest) ?? 0
+            previousLocation = latest
+            locationString = "you are \(Int(distanceInMeters)) from your start point"
+        }
+        print(latest)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
